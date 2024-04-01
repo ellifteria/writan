@@ -19,7 +19,7 @@ type Tokenizer struct {
 
 func MakeDefaultTokenizer() Tokenizer {
 	return Tokenizer{
-		[]Scanner{makeCharScanner(), makeTextScanner()},
+		[]Scanner{makeCmdScanner(), makeCharScanner(), makeTextScanner()},
 	}
 }
 
@@ -52,4 +52,17 @@ func (t Tokenizer) Test(plainMarkdown string) {
 	token := t.Tokenize(plainMarkdown)
 	fmt.Println(token.toString())
 	fmt.Println(token.valuesToString())
+
+	if token.matchesOpenClose(BOLD_TOKEN, BOLD_TOKEN) {
+		insideToken, nextToken := token.next.copyUntil(BOLD_TOKEN)
+		fmt.Println(insideToken.toString())
+		fmt.Println(nextToken.toString())
+		if insideToken.matchesOpenClose(ITALICS_TOKEN, ITALICS_TOKEN) {
+			insideInsideToken, nextNextToken := insideToken.next.copyUntil(ITALICS_TOKEN)
+			fmt.Println(insideInsideToken.toString())
+			if nextNextToken != nil {
+				fmt.Println(nextNextToken.toString())
+			}
+		}
+	}
 }

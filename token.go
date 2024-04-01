@@ -6,19 +6,14 @@ type TokenType int
 
 const (
 	NULL_TOKEN TokenType = iota
-	QUOTE_TOKEN
-	OPEN_BRACKET_TOKEN
-	CLOSE_BRACKET_TOKEN
-	OPEN_BRACE_TOKEN
-	CLOSE_BRACE_TOKEN
-	OPEN_PAREN_TOKEN
-	CLOSE_PAREN_TOKEN
-	OPEN_ARROW_TOKEN
-	CLOSE_ARROW_TOKEN
-	UNDERSCORE_TOKEN
-	STAR_TOKEN
+	CODE_INLINE_TOKEN
+	CODE_BLOCK_TOKEN
+	QUOTE_BLOCK_TOKEN
+	BOLD_TOKEN
+	ITALICS_TOKEN
 	NEWLINE_TOKEN
-	EXCLAMATION_TOKEN
+	CLOSE_TOKEN
+	ESCAPE_TOKEN
 	TEXT_TOKEN
 	EOF_TOKEN
 )
@@ -26,19 +21,14 @@ const (
 func (t TokenType) String() string {
 	return [...]string{
 		"NULL",
-		"QUOTE",
-		"OPEN_BRACKET",
-		"CLOSE_BRACKET",
-		"OPEN_BRACE",
-		"CLOSE_BRACE",
-		"OPEN_PAREN",
-		"CLOSE_PAREN",
-		"OPEN_ARROW",
-		"CLOSE_ARROW",
-		"UNDERSCORE",
-		"STAR",
+		"CODE_INLINE",
+		"CODE_BLOCK",
+		"QUOTE_BLOCK",
+		"BOLD",
+		"ITALICS",
 		"NEWLINE",
-		"EXCLAMATION",
+		"CLOSE",
+		"ESCAPE",
 		"TEXT",
 		"EOF",
 	}[t]
@@ -141,4 +131,66 @@ func (t Token) isAOr(tokenTypes []TokenType) bool {
 	}
 
 	return false
+}
+
+func (t Token) matchesOpenClose(openingTokenType TokenType, closingTokenType TokenType) bool {
+	if t.tokenType != openingTokenType {
+		return false
+	}
+	currToken := t
+
+	for currToken.next != nil {
+		if currToken.next.tokenType == closingTokenType {
+			return true
+		}
+
+		currToken = *currToken.next
+	}
+
+	return false
+}
+
+func (t Token) copy() Token {
+	if t.next == nil {
+		return makeToken(t.tokenType, t.tokenValue)
+	}
+
+	token := makeToken(t.tokenType, t.tokenValue)
+
+	nextToken := t.next.copy()
+	token.next = &nextToken
+
+	return token
+}
+
+func (t Token) copyUntil(untilTokenType TokenType) (Token, *Token) {
+	if t.tokenType == untilTokenType {
+		token := makeNullToken()
+		nextTokenPointer := token.next
+
+		if t.next == nil {
+			childOfFinalToken := makeNullToken()
+			nextTokenPointer = &childOfFinalToken
+		}
+
+		return token, nextTokenPointer
+	}
+
+	token := makeToken(t.tokenType, t.tokenValue)
+	var nextTokenPointer *Token
+
+	if t.next == nil {
+		childOfFinalToken := makeNullToken()
+		nextTokenPointer = &childOfFinalToken
+	} else {
+		if t.next.tokenType != untilTokenType {
+			var nextToken Token
+			nextToken, nextTokenPointer = t.next.copyUntil(untilTokenType)
+			token.next = &nextToken
+		} else {
+			nextTokenPointer = t.next.next
+		}
+	}
+
+	return token, nextTokenPointer
 }
