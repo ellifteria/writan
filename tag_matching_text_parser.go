@@ -2,12 +2,12 @@ package writan
 
 type TagMatchingTextParser struct {
 	baseParser          *BaseParser
-	openingTagTokenType TokenType
-	closingTagTokenType TokenType
-	nodeType            NodeType
+	openingTagTokenType string
+	closingTagTokenType string
+	nodeType            string
 }
 
-func makeTagMatchingTextParser(opener TokenType, closer TokenType, nodeType NodeType) TagMatchingTextParser {
+func makeTagMatchingTextParser(opener string, closer string, nodeType string) TagMatchingTextParser {
 	return TagMatchingTextParser{nil, opener, closer, nodeType}
 }
 
@@ -31,7 +31,6 @@ func (p TagMatchingTextParser) match(token Token) (Node, *Token) {
 
 	interiorNode := makeNode(p.nodeType, "")
 	interiorTokenPtr = token.next
-	// fmt.Println(interiorTokenPtr.toString())
 
 	for interiorTokenPtr != nil {
 		var childNode Node

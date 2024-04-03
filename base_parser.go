@@ -1,7 +1,5 @@
 package writan
 
-import "fmt"
-
 type BaseParser struct {
 	parsers []Parser
 }
@@ -11,7 +9,6 @@ func makeBaseParser() BaseParser {
 }
 
 func (p BaseParser) match(token Token) (Node, *Token) {
-	fmt.Println(token.tokenValue)
 	var node Node
 	var nextTokenPtr *Token
 	for _, parser := range p.parsers {

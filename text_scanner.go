@@ -1,11 +1,12 @@
 package writan
 
 type TextScanner struct {
-	scanners []Scanner
+	scanners      []Scanner
+	textTokenType string
 }
 
 func makeTextScanner() TextScanner {
-	return TextScanner{[]Scanner{makeCmdScanner(), makeCharScanner()}}
+	return TextScanner{[]Scanner{makeCmdScanner(), makeCharScanner()}, TEXT_TOKEN}
 }
 
 func (s TextScanner) fromString(plainMarkdown string) Token {
@@ -14,7 +15,7 @@ func (s TextScanner) fromString(plainMarkdown string) Token {
 		chars := plainMarkdown[index : index+2]
 		for _, scanner := range s.scanners {
 			if !scanner.fromString(chars).isNull() {
-				return makeToken(TEXT_TOKEN, text)
+				return makeToken(s.textTokenType, text)
 			}
 		}
 		text += string(chars[0])
@@ -28,5 +29,5 @@ func (s TextScanner) fromString(plainMarkdown string) Token {
 	}
 	text += string(char[0])
 
-	return makeToken(TEXT_TOKEN, text)
+	return makeToken(s.textTokenType, text)
 }

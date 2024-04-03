@@ -20,5 +20,5 @@ func main() {
 	// tokenizer.TestBTP("hello@*h@*")
 	// tokenizer.TestBTP("@*hello@*")
 	// tokenizer.TestBTP("@*hello@*, world")
-	tokenizer.TestBTP("@*@_h@_ello@*, world")
+	tokenizer.TestBTP("@*@_h@_e@C@cl@c@Clo@*, world")
 }

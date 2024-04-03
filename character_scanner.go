@@ -1,12 +1,12 @@
 package writan
 
 type CharScanner struct {
-	validTokens map[string]TokenType
+	validTokens map[string]string
 }
 
 func makeCharScanner() CharScanner {
 	return CharScanner{
-		map[string]TokenType{
+		map[string]string{
 			"\n": NEWLINE_TOKEN,
 		},
 	}
@@ -14,5 +14,11 @@ func makeCharScanner() CharScanner {
 
 func (s CharScanner) fromString(plainMarkdown string) Token {
 	char := string(plainMarkdown[0])
-	return makeToken(s.validTokens[char], char)
+
+	scannerToken := s.validTokens[char]
+	if scannerToken == "" {
+		return makeNullToken()
+	}
+
+	return makeToken(scannerToken, char)
 }

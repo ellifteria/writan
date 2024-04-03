@@ -2,47 +2,41 @@ package writan
 
 import "fmt"
 
-type TokenType int
-
 const (
-	NULL_TOKEN TokenType = iota
-	CODE_INLINE_TOKEN
-	CODE_BLOCK_TOKEN
-	QUOTE_BLOCK_TOKEN
-	BOLD_TOKEN
-	ITALICS_TOKEN
-	NEWLINE_TOKEN
-	CLOSE_TOKEN
-	ESCAPE_TOKEN
-	TEXT_TOKEN
-	EOF_TOKEN
+	NULL_TOKEN        = "NULL_TOKEN"
+	EOF_TOKEN         = "EOF_TOKEN"
+	TEXT_TOKEN        = "TEXT_TOKEN"
+	CODE_INLINE_TOKEN = "CODE_INLINE_TOKEN"
+	CODE_BLOCK_TOKEN  = "CODE_BLOCK_TOKEN"
+	QUOTE_BLOCK_TOKEN = "QUOTE_BLOCK_TOKEN"
+	BOLD_TOKEN        = "BOLD_TOKEN"
+	ITALICS_TOKEN     = "ITALICS_TOKEN"
+	NEWLINE_TOKEN     = "NEWLINE_TOKEN"
+	AT_TOKEN          = "AT_TOKEN"
 )
 
-func (t TokenType) String() string {
-	return [...]string{
-		"NULL",
-		"CODE_INLINE",
-		"CODE_BLOCK",
-		"QUOTE_BLOCK",
-		"BOLD",
-		"ITALICS",
-		"NEWLINE",
-		"CLOSE",
-		"ESCAPE",
-		"TEXT",
-		"EOF",
-	}[t]
+var VALID_TOKEN_TYPES []string = []string{
+	NULL_TOKEN,
+	EOF_TOKEN,
+	TEXT_TOKEN,
+	CODE_INLINE_TOKEN,
+	CODE_BLOCK_TOKEN,
+	QUOTE_BLOCK_TOKEN,
+	BOLD_TOKEN,
+	ITALICS_TOKEN,
+	NEWLINE_TOKEN,
+	AT_TOKEN,
 }
 
 type Token struct {
-	tokenType  TokenType
+	tokenType  string
 	tokenValue string
 	next       *Token
 }
 
-func makeToken(tokenType TokenType, tokenValue string) Token {
+func makeToken(tokenType string, tokenValue string) Token {
 	if tokenType == NULL_TOKEN || tokenValue == "" {
-		makeNullToken()
+		return makeNullToken()
 	}
 
 	return Token{tokenType: tokenType, tokenValue: tokenValue, next: nil}
@@ -60,17 +54,17 @@ func (t Token) isNull() bool {
 	return t.tokenType == NULL_TOKEN
 }
 
-func (t Token) isPresent() bool {
-	return !t.isNull()
-}
+// func (t Token) isPresent() bool {
+// 	return !t.isNull()
+// }
 
-func (t Token) length() int {
-	if t.isNull() {
-		return 0
-	}
+// func (t Token) length() int {
+// 	if t.isNull() {
+// 		return 0
+// 	}
 
-	return len(t.tokenValue)
-}
+// 	return len(t.tokenValue)
+// }
 
 func (t Token) toString() string {
 	var nextTokenString string
@@ -81,7 +75,7 @@ func (t Token) toString() string {
 		nextToken := *t.next
 		nextTokenString = nextToken.toString()
 	}
-	return fmt.Sprintf("<type: %s, value: %s next: %s>", t.tokenType.String(), t.tokenValue, nextTokenString)
+	return fmt.Sprintf("<type: %s, value: \"%s\" next: %s>", t.tokenType, t.tokenValue, nextTokenString)
 }
 
 func (t Token) valuesToString() string {
@@ -96,44 +90,44 @@ func (t Token) valuesToString() string {
 	return fmt.Sprintf("%s%s", t.tokenValue, nextTokenString)
 }
 
-func (t Token) matchesTypes(tokenTypes []TokenType) bool {
-	if len(tokenTypes) == 0 {
-		return true
-	}
+// func (t Token) matchesTypes(tokenTypes []string) bool {
+// 	if len(tokenTypes) == 0 {
+// 		return true
+// 	}
 
-	firstTokenType := tokenTypes[0]
-	if t.tokenType != firstTokenType {
-		return false
-	}
+// 	firstTokenType := tokenTypes[0]
+// 	if t.tokenType != firstTokenType {
+// 		return false
+// 	}
 
-	if len(tokenTypes) == 1 {
-		return true
-	}
+// 	if len(tokenTypes) == 1 {
+// 		return true
+// 	}
 
-	if t.next == nil {
-		return false
-	}
+// 	if t.next == nil {
+// 		return false
+// 	}
 
-	remainingTokenTypes := tokenTypes[1:]
+// 	remainingTokenTypes := tokenTypes[1:]
 
-	return t.next.matchesTypes(remainingTokenTypes)
-}
+// 	return t.next.matchesTypes(remainingTokenTypes)
+// }
 
-func (t Token) isA(tokenType TokenType) bool {
-	return t.tokenType == tokenType
-}
+// func (t Token) isA(tokenType string) bool {
+// 	return t.tokenType == tokenType
+// // }
 
-func (t Token) isAOr(tokenTypes []TokenType) bool {
-	for _, tokenType := range tokenTypes {
-		if t.isA(tokenType) {
-			return true
-		}
-	}
+// func (t Token) isAOr(tokenTypes []string) bool {
+// 	for _, tokenType := range tokenTypes {
+// 		if t.isA(tokenType) {
+// 			return true
+// 		}
+// 	}
 
-	return false
-}
+// 	return false
+// }
 
-func (t Token) matchesOpenClose(openingTokenType TokenType, closingTokenType TokenType) bool {
+func (t Token) matchesOpenClose(openingTokenType string, closingTokenType string) bool {
 	if t.tokenType != openingTokenType {
 		return false
 	}
@@ -150,20 +144,20 @@ func (t Token) matchesOpenClose(openingTokenType TokenType, closingTokenType Tok
 	return false
 }
 
-func (t Token) copy() Token {
-	if t.next == nil {
-		return makeToken(t.tokenType, t.tokenValue)
-	}
+// func (t Token) copy() Token {
+// 	if t.next == nil {
+// 		return makeToken(t.tokenType, t.tokenValue)
+// 	}
 
-	token := makeToken(t.tokenType, t.tokenValue)
+// 	token := makeToken(t.tokenType, t.tokenValue)
 
-	nextToken := t.next.copy()
-	token.next = &nextToken
+// 	nextToken := t.next.copy()
+// 	token.next = &nextToken
 
-	return token
-}
+// 	return token
+// }
 
-func (t Token) copyUntil(untilTokenType TokenType) (Token, *Token) {
+func (t Token) copyUntil(untilTokenType string) (Token, *Token) {
 	if t.tokenType == untilTokenType {
 		token := makeNullToken()
 		nextTokenPointer := token.next
