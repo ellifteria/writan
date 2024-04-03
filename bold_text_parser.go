@@ -1,19 +1,43 @@
 package writan
 
-type BoldTextParser struct {
-	baseParser BaseParser
+type TagMatchingTextParser struct {
+	baseParser          *BaseParser
+	openingTagTokenType TokenType
+	closingTagTokenType TokenType
+	nodeType            NodeType
 }
 
-func (p BoldTextParser) match(token Token) (Node, *Token) {
-	if !(token.matchesOpenClose(BOLD_TOKEN, BOLD_TOKEN)) {
+func makeTagMatchingTextParser(opener TokenType, closer TokenType, nodeType NodeType) TagMatchingTextParser {
+	return TagMatchingTextParser{nil, opener, closer, nodeType}
+}
+
+func (p TagMatchingTextParser) match(token Token) (Node, *Token) {
+	if !(token.matchesOpenClose(p.openingTagTokenType, p.closingTagTokenType)) {
 		return makeNullNode(), nil
 	}
 
-	insideToken, nextToken := token.next.copyUntil(BOLD_TOKEN)
-	interiorNode, _ := p.baseParser.match(insideToken)
+	if token.next.tokenType == p.closingTagTokenType {
+		return makeNode(p.nodeType, ""), token.next.next
+	}
 
-	node := makeNode(BOLD_TEXT_NODE, "TEST", 1)
-	node.children = append(node.children, &interiorNode)
+	interiorTokenPtr := token.next
 
-	return node, nextToken
+	for (*interiorTokenPtr).next.tokenType != p.closingTagTokenType {
+		interiorTokenPtr = interiorTokenPtr.next
+	}
+
+	nextToken := interiorTokenPtr.next.next
+	interiorTokenPtr.next = nil
+
+	interiorNode := makeNode(p.nodeType, "")
+	interiorTokenPtr = token.next
+	// fmt.Println(interiorTokenPtr.toString())
+
+	for interiorTokenPtr != nil {
+		var childNode Node
+		childNode, interiorTokenPtr = p.baseParser.match(*interiorTokenPtr)
+		interiorNode.children = append(interiorNode.children, &childNode)
+	}
+
+	return interiorNode, nextToken
 }

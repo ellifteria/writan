@@ -1,5 +1,5 @@
 package writan
 
 type Parser interface {
-	match(token Token) Node
+	match(token Token) (Node, *Token)
 }

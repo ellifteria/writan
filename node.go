@@ -1,5 +1,7 @@
 package writan
 
+import "fmt"
+
 type NodeType int
 
 const (
@@ -35,18 +37,21 @@ func (n NodeType) String() string {
 type Node struct {
 	nodeType  NodeType
 	nodeValue string
-	consumed  int
 	children  []*Node
 }
 
-func makeNode(nodeType NodeType, nodeValue string, consumed int) Node {
-	if nodeType == NULL_NODE || nodeValue == "" {
+func makeNode(nodeType NodeType, nodeValue string) Node {
+	if nodeType == NULL_NODE {
 		makeNullNode()
 	}
 
-	return Node{nodeType: nodeType, nodeValue: nodeValue, consumed: consumed, children: make([]*Node, 0)}
+	return Node{nodeType: nodeType, nodeValue: nodeValue, children: make([]*Node, 0)}
 }
 
 func makeNullNode() Node {
-	return Node{nodeType: NULL_NODE, nodeValue: "", consumed: 0, children: make([]*Node, 0)}
+	return Node{nodeType: NULL_NODE, nodeValue: "", children: make([]*Node, 0)}
+}
+
+func (n *Node) toString() string {
+	return fmt.Sprintf("<type: %s, value: %s>", n.nodeType.String(), n.nodeValue)
 }

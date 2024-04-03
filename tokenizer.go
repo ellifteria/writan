@@ -65,4 +65,31 @@ func (t Tokenizer) Test(plainMarkdown string) {
 			}
 		}
 	}
+	fmt.Println(t.Tokenize("@*@_hello@_@*").matchesOpenClose(BOLD_TOKEN, BOLD_TOKEN))
+}
+
+func (t Tokenizer) TestBTP(plainMarkdown string) {
+	token := t.Tokenize(plainMarkdown)
+	baseParser := makeBaseParser()
+	btp := makeTagMatchingTextParser(BOLD_TOKEN, BOLD_TOKEN, BOLD_TEXT_NODE)
+	itp := makeTagMatchingTextParser(ITALICS_TOKEN, ITALICS_TOKEN, ITALICIZED_TEXT_NODE)
+	tp := makeTextParser()
+	btp.baseParser = &baseParser
+	itp.baseParser = &baseParser
+	tp.baseParser = &baseParser
+	baseParser.parsers = []Parser{&btp, &itp, &tp}
+	node, _ := btp.match(token)
+	for _, child := range node.children {
+		fmt.Printf("opening: %s\n", (*child).nodeType.String())
+		fmt.Println((*child).nodeValue)
+		for _, childChild := range child.children {
+			fmt.Printf("opening: %s\n", (*childChild).nodeType.String())
+			fmt.Println((*childChild).nodeValue)
+			fmt.Printf("closing: %s\n", (*childChild).nodeType.String())
+		}
+		fmt.Printf("closing: %s\n", (*child).nodeType.String())
+	}
+	// if next != nil {
+	// 	fmt.Println(next.toString())
+	// }
 }
