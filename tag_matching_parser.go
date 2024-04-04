@@ -1,17 +1,17 @@
 package writan
 
-type TagMatchingTextParser struct {
+type TagMatchingParser struct {
 	baseParser          *BaseParser
 	openingTagTokenType string
 	closingTagTokenType string
 	nodeType            string
 }
 
-func makeTagMatchingTextParser(opener string, closer string, nodeType string) TagMatchingTextParser {
-	return TagMatchingTextParser{nil, opener, closer, nodeType}
+func makeTagMatchingParser(opener string, closer string, nodeType string) TagMatchingParser {
+	return TagMatchingParser{nil, opener, closer, nodeType}
 }
 
-func (p TagMatchingTextParser) match(token Token) (Node, *Token) {
+func (p TagMatchingParser) match(token Token) (Node, *Token) {
 	if !(token.matchesOpenClose(p.openingTagTokenType, p.closingTagTokenType)) {
 		return makeNullNode(), nil
 	}

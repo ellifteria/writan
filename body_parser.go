@@ -33,3 +33,8 @@ func (p BodyParser) match(token Token) (Node, *Token) {
 
 	return bodyNode, nil
 }
+
+func (p BodyParser) Match(token Token) Node {
+	node, _ := p.match(token)
+	return node
+}

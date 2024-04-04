@@ -4,14 +4,14 @@ type Parser interface {
 	match(token Token) (Node, *Token)
 }
 
-func MakeParser() (*BaseParser, *BodyParser) {
+func MakeParser() *BodyParser {
 	baseParser := makeBaseParser()
 
-	boldTextParser := makeTagMatchingTextParser(BOLD_TOKEN, BOLD_TOKEN, BOLD_TEXT_NODE)
-	italicsTextParser := makeTagMatchingTextParser(ITALICS_TOKEN, ITALICS_TOKEN, ITALICIZED_TEXT_NODE)
-	codeInlineParser := makeTagMatchingTextParser(CODE_INLINE_TOKEN, CODE_INLINE_TOKEN, CODE_INLINE_NODE)
-	codeBlockParser := makeTagMatchingTextParser(CODE_BLOCK_TOKEN, CODE_BLOCK_TOKEN, CODE_BLOCK_NODE)
-	quoteBlockParser := makeTagMatchingTextParser(QUOTE_BLOCK_TOKEN, QUOTE_BLOCK_TOKEN, QUOTE_BLOCK_NODE)
+	boldParser := makeTagMatchingParser(BOLD_TOKEN, BOLD_TOKEN, BOLD_NODE)
+	italicsParser := makeTagMatchingParser(ITALICS_TOKEN, ITALICS_TOKEN, ITALIC_NODE)
+	codeInlineParser := makeTagMatchingParser(CODE_INLINE_TOKEN, CODE_INLINE_TOKEN, CODE_INLINE_NODE)
+	codeBlockParser := makeTagMatchingParser(CODE_BLOCK_TOKEN, CODE_BLOCK_TOKEN, CODE_BLOCK_NODE)
+	quoteBlockParser := makeTagMatchingParser(QUOTE_BLOCK_TOKEN, QUOTE_BLOCK_TOKEN, QUOTE_BLOCK_NODE)
 	textParser := makeTextParser()
 
 	newlineParser := makeSingleTokenParser(NEWLINE_TOKEN, NEWLINE_NODE)
@@ -23,8 +23,8 @@ func MakeParser() (*BaseParser, *BodyParser) {
 
 	sentenceParser.baseParser = &baseParser
 
-	boldTextParser.baseParser = &baseParser
-	italicsTextParser.baseParser = &baseParser
+	boldParser.baseParser = &baseParser
+	italicsParser.baseParser = &baseParser
 	textParser.baseParser = &baseParser
 	codeBlockParser.baseParser = &baseParser
 	codeInlineParser.baseParser = &baseParser
@@ -37,11 +37,11 @@ func MakeParser() (*BaseParser, *BodyParser) {
 		&codeBlockParser,
 		&codeInlineParser,
 		&quoteBlockParser,
-		&boldTextParser,
-		&italicsTextParser,
+		&boldParser,
+		&italicsParser,
 		&atParser,
 		&textParser,
 	}
 
-	return &baseParser, &bodyParser
+	return &bodyParser
 }

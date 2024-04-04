@@ -1,25 +1,46 @@
 package main
 
 import (
+	"flag"
+	"log"
+	"os"
+
 	"github.com/ellifteria/writan"
 )
 
+func check(err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func main() {
+	var err error
+
+	inputFileNamePtr := flag.String("i", "input.wrtn", "path to input file")
+	outputFileNamePtr := flag.String("o", "output.html", "path to output file")
+
+	flag.Parse()
+
+	plainWritan, err := os.ReadFile(*inputFileNamePtr)
+	check(err)
+
 	tokenizer := writan.MakeDefaultTokenizer()
-	// tokenizer.Test("@*Hello, World!@* My name is @_Elli@_.")
-	// tokenizer.Test("@*@_Hello, World!@_@* My name is @_Elli@_.")
-	// tokenizer.Test("@*@_Hello@_, World!@* My name is @_Elli@_.")
-	// 	tokenizer.Test("@/hello@/")
-	plainMarkdown := `@*@_Hello, World!@_@*
-My name is Elli, Beres. I'm a computer science student at Northwestern University.
 
-Find me at @celli.beres@@u.northwestern.edu@c`
+	token := tokenizer.Tokenize(string(plainWritan))
 
-	// tokenizer.Test(plainMarkdown)
+	parser := writan.MakeParser()
 
-	// tokenizer.TestBTP("hello@*h@*")
-	// tokenizer.TestBTP("@*hello@*")
-	// tokenizer.TestBTP("@*hello@*, world")
-	// tokenizer.TestBTP("@*@_h@_e@C@cl@c@Clo@*, world")
-	tokenizer.TestBTP(plainMarkdown)
+	node := parser.Match(token)
+
+	baseGenerator := writan.MakeGenerator()
+
+	generatedHtml := baseGenerator.Generate(&node)
+
+	outputFile, err := os.Create(*outputFileNamePtr)
+	check(err)
+	defer outputFile.Close()
+
+	_, err = outputFile.WriteString(generatedHtml)
+	check(err)
 }

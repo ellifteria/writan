@@ -54,18 +54,6 @@ func (t Token) isNull() bool {
 	return t.tokenType == NULL_TOKEN
 }
 
-// func (t Token) isPresent() bool {
-// 	return !t.isNull()
-// }
-
-// func (t Token) length() int {
-// 	if t.isNull() {
-// 		return 0
-// 	}
-
-// 	return len(t.tokenValue)
-// }
-
 func (t Token) toString() string {
 	var nextTokenString string
 
@@ -90,43 +78,6 @@ func (t Token) valuesToString() string {
 	return fmt.Sprintf("%s%s", t.tokenValue, nextTokenString)
 }
 
-// func (t Token) matchesTypes(tokenTypes []string) bool {
-// 	if len(tokenTypes) == 0 {
-// 		return true
-// 	}
-
-// 	firstTokenType := tokenTypes[0]
-// 	if t.tokenType != firstTokenType {
-// 		return false
-// 	}
-
-// 	if len(tokenTypes) == 1 {
-// 		return true
-// 	}
-
-// 	if t.next == nil {
-// 		return false
-// 	}
-
-// 	remainingTokenTypes := tokenTypes[1:]
-
-// 	return t.next.matchesTypes(remainingTokenTypes)
-// }
-
-// func (t Token) isA(tokenType string) bool {
-// 	return t.tokenType == tokenType
-// // }
-
-// func (t Token) isAOr(tokenTypes []string) bool {
-// 	for _, tokenType := range tokenTypes {
-// 		if t.isA(tokenType) {
-// 			return true
-// 		}
-// 	}
-
-// 	return false
-// }
-
 func (t Token) matchesOpenClose(openingTokenType string, closingTokenType string) bool {
 	if t.tokenType != openingTokenType {
 		return false
@@ -142,49 +93,4 @@ func (t Token) matchesOpenClose(openingTokenType string, closingTokenType string
 	}
 
 	return false
-}
-
-// func (t Token) copy() Token {
-// 	if t.next == nil {
-// 		return makeToken(t.tokenType, t.tokenValue)
-// 	}
-
-// 	token := makeToken(t.tokenType, t.tokenValue)
-
-// 	nextToken := t.next.copy()
-// 	token.next = &nextToken
-
-// 	return token
-// }
-
-func (t Token) copyUntil(untilTokenType string) (Token, *Token) {
-	if t.tokenType == untilTokenType {
-		token := makeNullToken()
-		nextTokenPointer := token.next
-
-		if t.next == nil {
-			childOfFinalToken := makeNullToken()
-			nextTokenPointer = &childOfFinalToken
-		}
-
-		return token, nextTokenPointer
-	}
-
-	token := makeToken(t.tokenType, t.tokenValue)
-	var nextTokenPointer *Token
-
-	if t.next == nil {
-		childOfFinalToken := makeNullToken()
-		nextTokenPointer = &childOfFinalToken
-	} else {
-		if t.next.tokenType != untilTokenType {
-			var nextToken Token
-			nextToken, nextTokenPointer = t.next.copyUntil(untilTokenType)
-			token.next = &nextToken
-		} else {
-			nextTokenPointer = t.next.next
-		}
-	}
-
-	return token, nextTokenPointer
 }
