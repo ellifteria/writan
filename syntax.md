@@ -6,4 +6,4 @@
 | italics | @_ |
 | inline code | @c |
 | block code | @C |
-| block quote | @C |
+| block quote | @> |

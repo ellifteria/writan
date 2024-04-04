@@ -11,7 +11,7 @@ func makeTextParser() TextParser {
 func (p TextParser) match(token Token) (Node, *Token) {
 	nextToken := token.next
 
-	interiorNode := makeNode(TEXT_NODE, token.tokenValue)
+	textNode := makeNode(TEXT_NODE, token.tokenValue)
 
-	return interiorNode, nextToken
+	return textNode, nextToken
 }

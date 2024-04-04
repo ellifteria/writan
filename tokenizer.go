@@ -18,9 +18,7 @@ type Tokenizer struct {
 }
 
 func MakeDefaultTokenizer() Tokenizer {
-	return Tokenizer{
-		[]Scanner{makeCmdScanner(), makeCharScanner(), makeTextScanner()},
-	}
+	return Tokenizer{[]Scanner{makeCmdScanner(), makeCharScanner(), makeTextScanner()}}
 }
 
 func (t Tokenizer) Tokenize(plainMarkdown string) Token {
@@ -70,20 +68,24 @@ func (t Tokenizer) Test(plainMarkdown string) {
 
 func (t Tokenizer) TestBTP(plainMarkdown string) {
 	token := t.Tokenize(plainMarkdown)
-	baseParser := makeBaseParser()
-	btp := makeTagMatchingTextParser(BOLD_TOKEN, BOLD_TOKEN, BOLD_TEXT_NODE)
-	itp := makeTagMatchingTextParser(ITALICS_TOKEN, ITALICS_TOKEN, ITALICIZED_TEXT_NODE)
-	cip := makeTagMatchingTextParser(CODE_INLINE_TOKEN, CODE_INLINE_TOKEN, CODE_INLINE_NODE)
-	cbp := makeTagMatchingTextParser(CODE_BLOCK_TOKEN, CODE_BLOCK_TOKEN, CODE_BLOCK_NODE)
-	qbp := makeTagMatchingTextParser(QUOTE_BLOCK_TOKEN, QUOTE_BLOCK_TOKEN, QUOTE_BLOCK_NODE)
-	tp := makeTextParser()
-	btp.baseParser = &baseParser
-	itp.baseParser = &baseParser
-	tp.baseParser = &baseParser
-	cbp.baseParser = &baseParser
-	cip.baseParser = &baseParser
-	qbp.baseParser = &baseParser
-	baseParser.parsers = []Parser{&cbp, &cip, &qbp, &btp, &itp, &tp}
-	node, _ := btp.match(token)
+	fmt.Println(token.toString())
+	// baseParser := makeBaseParser()
+	// btp := makeTagMatchingTextParser(BOLD_TOKEN, BOLD_TOKEN, BOLD_TEXT_NODE)
+	// itp := makeTagMatchingTextParser(ITALICS_TOKEN, ITALICS_TOKEN, ITALICIZED_TEXT_NODE)
+	// cip := makeTagMatchingTextParser(CODE_INLINE_TOKEN, CODE_INLINE_TOKEN, CODE_INLINE_NODE)
+	// cbp := makeTagMatchingTextParser(CODE_BLOCK_TOKEN, CODE_BLOCK_TOKEN, CODE_BLOCK_NODE)
+	// qbp := makeTagMatchingTextParser(QUOTE_BLOCK_TOKEN, QUOTE_BLOCK_TOKEN, QUOTE_BLOCK_NODE)
+	// tp := makeTextParser()
+	// btp.baseParser = &baseParser
+	// itp.baseParser = &baseParser
+	// tp.baseParser = &baseParser
+	// cbp.baseParser = &baseParser
+	// cip.baseParser = &baseParser
+	// qbp.baseParser = &baseParser
+	// baseParser.parsers = []Parser{&cbp, &cip, &qbp, &btp, &itp, &tp}
+
+	_, parser := MakeParser()
+
+	node, _ := parser.match(token)
 	fmt.Println(node.toString())
 }

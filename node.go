@@ -17,6 +17,8 @@ const (
 	ITALICIZED_TEXT_NODE  = "ITALICIZED_TEXT_NODE"
 	BOLD_TEXT_NODE        = "BOLD_TEXT_NODE"
 	TEXT_NODE             = "TEXT_NODE"
+	NEWLINE_NODE          = "NEWLINE_NODE"
+	AT_NODE               = "AT_NODE"
 )
 
 var VALID_NODES_TYPES = []string{
@@ -32,6 +34,8 @@ var VALID_NODES_TYPES = []string{
 	ITALICIZED_TEXT_NODE,
 	BOLD_TEXT_NODE,
 	TEXT_NODE,
+	NEWLINE_NODE,
+	AT_NODE,
 }
 
 type Node struct {
