@@ -1,5 +1,9 @@
 package writan
 
+import (
+	"strings"
+)
+
 type TagMatchingParser struct {
 	baseParser          *BaseParser
 	openingTagTokenType string
@@ -16,8 +20,11 @@ func (p TagMatchingParser) match(token Token) (Node, *Token) {
 		return makeNullNode(), nil
 	}
 
+	tokenValue := token.tokenValue
+	value := strings.Join(strings.Split(tokenValue[1:len(tokenValue)-1], " ")[1:], " ")
+
 	if token.next.tokenType == p.closingTagTokenType {
-		return makeNode(p.nodeType, ""), token.next.next
+		return makeNode(p.nodeType, value), token.next.next
 	}
 
 	interiorTokenPtr := token.next
@@ -29,7 +36,7 @@ func (p TagMatchingParser) match(token Token) (Node, *Token) {
 	nextToken := interiorTokenPtr.next.next
 	interiorTokenPtr.next = nil
 
-	interiorNode := makeNode(p.nodeType, "")
+	interiorNode := makeNode(p.nodeType, value)
 	interiorTokenPtr = token.next
 
 	for interiorTokenPtr != nil {

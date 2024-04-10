@@ -13,6 +13,7 @@ const (
 	ITALICS_TOKEN     = "ITALICS_TOKEN"
 	NEWLINE_TOKEN     = "NEWLINE_TOKEN"
 	AT_TOKEN          = "AT_TOKEN"
+	LINK_TOKEN        = "LINK_TOKEN"
 )
 
 var VALID_TOKEN_TYPES []string = []string{
@@ -26,6 +27,7 @@ var VALID_TOKEN_TYPES []string = []string{
 	ITALICS_TOKEN,
 	NEWLINE_TOKEN,
 	AT_TOKEN,
+	LINK_TOKEN,
 }
 
 type Token struct {
@@ -54,14 +56,14 @@ func (t Token) isNull() bool {
 	return t.tokenType == NULL_TOKEN
 }
 
-func (t Token) toString() string {
+func (t Token) ToString() string {
 	var nextTokenString string
 
 	if t.next == nil {
 		nextTokenString = "none"
 	} else {
 		nextToken := *t.next
-		nextTokenString = nextToken.toString()
+		nextTokenString = nextToken.ToString()
 	}
 	return fmt.Sprintf("<type: %s, value: \"%s\" next: %s>", t.tokenType, t.tokenValue, nextTokenString)
 }

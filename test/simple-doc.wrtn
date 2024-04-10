@@ -1,4 +1,5 @@
-@*@_Hello, World!@_@*
+@*;@_;Hello, World!@_;@*;
 This is the first test of writan.
 
-Writan generates HTML output from writan files like this one: @csimple-doc.wrtn@c.
+Writan generates HTML output from writan files like this one: @c;simple-doc.wrtn@c;.
+@a https://google.com;This@a; should be a link.

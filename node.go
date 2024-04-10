@@ -17,6 +17,7 @@ const (
 	TEXT_NODE        = "TEXT_NODE"
 	NEWLINE_NODE     = "NEWLINE_NODE"
 	AT_NODE          = "AT_NODE"
+	LINK_NODE        = "LINK_NODE"
 	ANY_NODE_TYPE    = "__any__"
 )
 
@@ -32,6 +33,7 @@ var VALID_NODES_TYPES = []string{
 	BOLD_NODE,
 	TEXT_NODE,
 	NEWLINE_NODE,
+	LINK_NODE,
 	AT_NODE,
 }
 
@@ -53,11 +55,11 @@ func makeNullNode() Node {
 	return Node{nodeType: NULL_NODE, nodeValue: "", children: make([]*Node, 0)}
 }
 
-func (n *Node) toString() string {
+func (n *Node) ToString() string {
 	start := fmt.Sprintf("<type: %s, value: \"%s\" children: [", n.nodeType, n.nodeValue)
 	middle := ""
 	for _, child := range n.children {
-		middle += child.toString()
+		middle += child.ToString()
 	}
 	end := "]>"
 

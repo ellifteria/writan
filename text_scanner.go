@@ -12,13 +12,12 @@ func makeTextScanner() TextScanner {
 func (s TextScanner) fromString(plainMarkdown string) Token {
 	text := ""
 	for index := 0; index < len(plainMarkdown)-1; index++ {
-		chars := plainMarkdown[index : index+2]
 		for _, scanner := range s.scanners {
-			if !scanner.fromString(chars).isNull() {
+			if !scanner.fromString(plainMarkdown[index:]).isNull() {
 				return makeToken(s.textTokenType, text)
 			}
 		}
-		text += string(chars[0])
+		text += string(plainMarkdown[index])
 	}
 
 	char := string(plainMarkdown[len(plainMarkdown)-1])

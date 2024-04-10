@@ -12,6 +12,8 @@ func MakeParser() *BodyParser {
 	codeInlineParser := makeTagMatchingParser(CODE_INLINE_TOKEN, CODE_INLINE_TOKEN, CODE_INLINE_NODE)
 	codeBlockParser := makeTagMatchingParser(CODE_BLOCK_TOKEN, CODE_BLOCK_TOKEN, CODE_BLOCK_NODE)
 	quoteBlockParser := makeTagMatchingParser(QUOTE_BLOCK_TOKEN, QUOTE_BLOCK_TOKEN, QUOTE_BLOCK_NODE)
+	linkParser := makeTagMatchingParser(LINK_TOKEN, LINK_TOKEN, LINK_NODE)
+
 	textParser := makeTextParser()
 
 	newlineParser := makeSingleTokenParser(NEWLINE_TOKEN, NEWLINE_NODE)
@@ -29,6 +31,8 @@ func MakeParser() *BodyParser {
 	codeBlockParser.baseParser = &baseParser
 	codeInlineParser.baseParser = &baseParser
 	quoteBlockParser.baseParser = &baseParser
+	linkParser.baseParser = &baseParser
+
 	atParser.baseParser = &baseParser
 	newlineParser.baseParser = &baseParser
 
@@ -40,6 +44,7 @@ func MakeParser() *BodyParser {
 		&boldParser,
 		&italicsParser,
 		&atParser,
+		&linkParser,
 		&textParser,
 	}
 
