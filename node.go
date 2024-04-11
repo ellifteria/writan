@@ -18,6 +18,7 @@ const (
 	NEWLINE_NODE     = "NEWLINE_NODE"
 	AT_NODE          = "AT_NODE"
 	LINK_NODE        = "LINK_NODE"
+	IMAGE_NODE       = "IMAGE_NODE"
 	ANY_NODE_TYPE    = "__any__"
 )
 
@@ -35,6 +36,7 @@ var VALID_NODES_TYPES = []string{
 	NEWLINE_NODE,
 	LINK_NODE,
 	AT_NODE,
+	IMAGE_NODE,
 }
 
 type Node struct {

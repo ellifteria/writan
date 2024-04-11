@@ -17,6 +17,7 @@ func MakeGenerator() *BaseGenerator {
 	quoteBlockGenerator := makeTagMatchingGenerator(QUOTE_BLOCK_NODE, "<blockquote>", "</blockquote>")
 	paragraphGenerator := makeTagMatchingGenerator(PARAGRAPH_NODE, "<p>", "</p>")
 	linkGenerator := makeLinkGenerator()
+	imageGenerator := makeImageGenerator()
 
 	bodyGenerator := makeBodyGenerator()
 	sentenceGenerator := makeSentenceGenerator()
@@ -32,12 +33,14 @@ func MakeGenerator() *BaseGenerator {
 	codeBlockGenerator.baseGenerator = &baseGenerator
 	quoteBlockGenerator.baseGenerator = &baseGenerator
 	linkGenerator.baseGenerator = &baseGenerator
+	imageGenerator.baseGenerator = &baseGenerator
 
 	baseGenerator.generators = []Generator{
 		codeInlineGenerator,
 		codeBlockGenerator,
 		quoteBlockGenerator,
 		linkGenerator,
+		imageGenerator,
 		sentenceGenerator,
 		bodyGenerator,
 		paragraphGenerator,

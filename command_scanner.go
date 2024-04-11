@@ -13,13 +13,14 @@ func makeCmdScanner() CmdScanner {
 		cmdToken: '@',
 		endToken: ';',
 		cmdChars: map[string]string{
-			"c": CODE_INLINE_TOKEN,
-			"C": CODE_BLOCK_TOKEN,
-			">": QUOTE_BLOCK_TOKEN,
-			"*": BOLD_TOKEN,
-			"_": ITALICS_TOKEN,
-			"@": AT_TOKEN,
-			"a": LINK_TOKEN,
+			"c":   CODE_INLINE_TOKEN,
+			"C":   CODE_BLOCK_TOKEN,
+			">":   QUOTE_BLOCK_TOKEN,
+			"*":   BOLD_TOKEN,
+			"_":   ITALICS_TOKEN,
+			"@":   AT_TOKEN,
+			"a":   LINK_TOKEN,
+			"img": IMAGE_TOKEN,
 		},
 	}
 }

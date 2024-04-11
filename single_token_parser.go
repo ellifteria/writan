@@ -1,5 +1,7 @@
 package writan
 
+import "strings"
+
 type SingleTokenParser struct {
 	tokenToParse string
 	nodeToSet    string
@@ -15,8 +17,11 @@ func (p SingleTokenParser) match(token Token) (Node, *Token) {
 		return makeNullNode(), nil
 	}
 
+	tokenValue := token.tokenValue
+	value := strings.Join(strings.Split(tokenValue[1:len(tokenValue)-1], " ")[1:], " ")
+
 	nextToken := token.next
-	textNode := makeNode(p.nodeToSet, token.tokenValue)
+	textNode := makeNode(p.nodeToSet, value)
 
 	return textNode, nextToken
 }

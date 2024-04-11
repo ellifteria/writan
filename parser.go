@@ -18,6 +18,7 @@ func MakeParser() *BodyParser {
 
 	newlineParser := makeSingleTokenParser(NEWLINE_TOKEN, NEWLINE_NODE)
 	atParser := makeSingleTokenParser(AT_TOKEN, AT_NODE)
+	imageParser := makeSingleTokenParser(IMAGE_TOKEN, IMAGE_NODE)
 
 	sentenceParser := makeSentenceParser()
 	paragraphParser := makeParagraphParser(&sentenceParser)
@@ -32,6 +33,7 @@ func MakeParser() *BodyParser {
 	codeInlineParser.baseParser = &baseParser
 	quoteBlockParser.baseParser = &baseParser
 	linkParser.baseParser = &baseParser
+	imageParser.baseParser = &baseParser
 
 	atParser.baseParser = &baseParser
 	newlineParser.baseParser = &baseParser
@@ -45,6 +47,7 @@ func MakeParser() *BodyParser {
 		&italicsParser,
 		&atParser,
 		&linkParser,
+		&imageParser,
 		&textParser,
 	}
 

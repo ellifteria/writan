@@ -14,6 +14,7 @@ const (
 	NEWLINE_TOKEN     = "NEWLINE_TOKEN"
 	AT_TOKEN          = "AT_TOKEN"
 	LINK_TOKEN        = "LINK_TOKEN"
+	IMAGE_TOKEN       = "IMAGE_TOKEN"
 )
 
 var VALID_TOKEN_TYPES []string = []string{
@@ -28,6 +29,7 @@ var VALID_TOKEN_TYPES []string = []string{
 	NEWLINE_TOKEN,
 	AT_TOKEN,
 	LINK_TOKEN,
+	IMAGE_TOKEN,
 }
 
 type Token struct {
@@ -68,14 +70,14 @@ func (t Token) ToString() string {
 	return fmt.Sprintf("<type: %s, value: \"%s\" next: %s>", t.tokenType, t.tokenValue, nextTokenString)
 }
 
-func (t Token) valuesToString() string {
+func (t Token) ValuesToString() string {
 	var nextTokenString string
 
 	if t.next == nil {
 		nextTokenString = ""
 	} else {
 		nextToken := *t.next
-		nextTokenString = nextToken.valuesToString()
+		nextTokenString = nextToken.ValuesToString()
 	}
 	return fmt.Sprintf("%s%s", t.tokenValue, nextTokenString)
 }

@@ -29,9 +29,14 @@ func main() {
 
 	token := tokenizer.Tokenize(string(plainWritan))
 
+	// fmt.Println(token.ToString())
+	// fmt.Println(token.ValuesToString())
+
 	parser := writan.MakeParser()
 
 	node := parser.Match(token)
+
+	// fmt.Println(node.ToString())
 
 	baseGenerator := writan.MakeGenerator()
 

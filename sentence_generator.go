@@ -15,7 +15,7 @@ func (g SentenceGenerator) generate(node *Node) string {
 		sentence += g.baseGenerator.generate(child)
 	}
 
-	return sentence
+	return sentence + " "
 }
 
 func (g SentenceGenerator) getNodeType() string {

@@ -3,3 +3,6 @@ This is the first test of writan.
 
 Writan generates HTML output from writan files like this one: @c;simple-doc.wrtn@c;.
 @a https://google.com;This@a; should be a link.
+
+Here there should be an image:
+@img https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Racket-logo.svg/2048px-Racket-logo.svg.png racket;
